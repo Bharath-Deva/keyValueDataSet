@@ -69,8 +69,8 @@ class key_value_data_set:
             raise Exception('ERROR : Value is not of JSON')
         
     def __checking_file_size(self, file_path):
-        size = (os.stat(file_path).st_size)/(1024*1024)
-        if size < 1024:
+        size = (os.stat(file_path).st_size)
+        if size < (1024*1024*1024):
             return 0
         return 1
 
