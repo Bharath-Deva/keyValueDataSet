@@ -17,7 +17,7 @@
 # 
 #     The file size never exceeds 1GB.
 # 
-#     Supports thread safety. Thus it supports multi-threading
+#     Thread safety is implemented only for each functions. Thus it supports multi-threading
 
 
 
@@ -33,7 +33,7 @@ import time
 class KeyValueDataSet:
     def __init__(self, file_path = 'data.json'):
         '''
-            When the class is created with instance, the constructor will create the necessary file and dir for the key-value data store
+            When the class is created with instance, the constructor will create the necessary file and dir for the key-value data store.
         '''
         self.lock = threading.Lock()
         try:
@@ -55,7 +55,7 @@ class KeyValueDataSet:
             json.dump({},f)
 
     def __is_key_value_pair_legitimate(self, key, value, file_data):
-        ''' checking weather the key and value satisfy business marks
+        ''' checking weather the key and value satisfy the business marks.
         '''
         if(not isinstance(value,dict)):
             raise Exception('ERROR : Value is not of JSON')
@@ -67,7 +67,8 @@ class KeyValueDataSet:
             raise Exception(f'ERROR : Key {key} is of length more than 32 character')
         if(key in file_data):
             raise Exception(f'ERROR : Your key {key} is already registered. Try some unique keys')
-        
+        return 1
+
     def __checking_file_size(self, file_path):
         size = (os.stat(file_path).st_size)
         if size < (1024*1024*1024):
@@ -75,44 +76,57 @@ class KeyValueDataSet:
         return 1
 
     def __time_to_live(self,ttl,key):
+        ''' Time-To-Live porperty is carried out using multi-threading.
+            '''
         if(not isinstance(ttl,int)):
             raise Exception('TTL operand should be of type int')
         time.sleep(ttl-0.2)
         self.delete(key)
 
+    def __handling_file_data(self,mode,updated_data = None):
+        with self.lock:
+            with open(self.file_location,mode) as f :
+                if(mode == 'r'):
+                    return(json.load(f))
+                else:
+                    f.truncate()
+                    f.write(json.dumps(updated_data))
+                    return 0
 
     def create(self, req_data, ttl = False):
-        with self.lock:
-            if(self.__checking_file_size(self.file_location)):
-                raise Exception('ERROR : File size is exceeding 1GB') 
-            key,value = list(req_data.items())[0]
-            if(ttl):
-                threading.Thread(target=self.__time_to_live, args=(ttl,key)).start() #creating a thread for 
-            with open(self.file_location, 'r+') as f:
-                file_data = json.load(f)
-                self.__is_key_value_pair_legitimate(key, value, file_data) 
-                file_data.update(req_data)
-                f.seek(0)
-                f.write(json.dumps(file_data))
-                return(None)
+        ''' create will allow the user to update their data in respective
+        file path.
+        '''
+        if(self.__checking_file_size(self.file_location)):
+            raise Exception('ERROR : File size is exceeding 1GB') 
+        key,value = list(req_data.items())[0]
+        if(ttl):
+            #Achieving time-to-live property using multi-threading
+            threading.Thread(target=self.__time_to_live, args=(ttl,key)).start()
+        file_data = self.__handling_file_data('r')
+        if(self.__is_key_value_pair_legitimate(key, value, file_data)):
+            file_data.update(req_data)
+            self.__handling_file_data('w',file_data)
+        return None
     
     def read(self, provided_key):
-        with open(self.file_location, 'r') as f:
-            res_file_data = json.load(f)
-            if(provided_key in res_file_data):
-                return(res_file_data[provided_key])
-            else:
-                raise Exception(f"ERROR : provided key {provided_key} isn't in the data-set")
+        ''' read will allow the user to update their data in respective
+        file path.
+        '''
+        res_file_data = self.__handling_file_data('r')
+        if(provided_key in res_file_data):
+            return(res_file_data[provided_key])
+        else:
+            raise Exception(f"ERROR : provided key {provided_key} isn't in the data-set")
 
     def delete(self, provided_key):
-        with self.lock:
-            with open(self.file_location, 'r+') as f:
-                file_data = json.load(f)
-                if(provided_key in file_data):
-                    del(file_data[provided_key])
-                    f.seek(0)
-                    f.truncate()
-                    json.dump(file_data,f)
-                    return(None)
-                else:
-                    raise Exception(f"ERROR : provided key {provided_key} isn't in the data-set")
+        ''' delete will allow the user to delelte their data in respective
+        file path
+        '''    
+        res_file_data = self.__handling_file_data('r')
+        if(provided_key in res_file_data):
+            del(res_file_data[provided_key])
+            self.__handling_file_data('w',res_file_data)
+            return(None)
+        else:
+            raise Exception(f"ERROR : provided key {provided_key} isn't in the data-set")

@@ -29,7 +29,7 @@ class TestingKeyValueDataSet(unittest.TestCase):
     @tempdir()
     def test_file_creation(self,dir):
         ''' after creating the instance of KeyValueDataSet checking weather
-        files are created properly irrespective of the user providing the path
+        files are created properly irrespective of path provided by the user.
         '''
         print('testing file creation')
         path1 = os.path.join(dir.path,'test.txt')
