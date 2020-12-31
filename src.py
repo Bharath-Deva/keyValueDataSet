@@ -28,8 +28,9 @@ import json
 import sys
 import os
 import threading
+import time
 
-class key_value_data_set:
+class KeyValueDataSet:
     def __init__(self, file_path = 'data.json'):
         '''
             When the class is created with instance, the constructor will create the necessary file and dir for the key-value data store
@@ -51,22 +52,21 @@ class key_value_data_set:
 
     def __open_file(self):
         with open(self.file_location, 'w') as f:
-            data = {}
-            json.dump(data,f)
-
+            json.dump({},f)
 
     def __is_key_value_pair_legitimate(self, key, value, file_data):
-
-        if(key in file_data):
-            raise Exception(f'ERROR : Your key {key} is already registered. Try some unique keys')
-        if( len(key)>32):
-            raise Exception(f'ERROR : Key {key} is of length more than 32 character')
-        if(not key.isalpha()):
-            raise Exception(f'ERROR : Key {key} is not of alphabatics (May conatin numbers or spaces or special character)')
-        if(sys.getsizeof(value)>16384):
-            raise Exception(f"ERROR : Your value {value} size is exceeding 16KB (Your value's is {sys.getsizeof(value)})")
+        ''' checking weather the key and value satisfy business marks
+        '''
         if(not isinstance(value,dict)):
             raise Exception('ERROR : Value is not of JSON')
+        if(sys.getsizeof(value)>16384):
+            raise Exception(f"ERROR : Your value {value} size is exceeding 16KB (Your value's is {sys.getsizeof(value)})")
+        if(not key.isalpha()):
+            raise Exception(f'ERROR : Key {key} is not of alphabatics (May conatin numbers or spaces or special character)')
+        if( len(key)>32):
+            raise Exception(f'ERROR : Key {key} is of length more than 32 character')
+        if(key in file_data):
+            raise Exception(f'ERROR : Your key {key} is already registered. Try some unique keys')
         
     def __checking_file_size(self, file_path):
         size = (os.stat(file_path).st_size)
@@ -75,29 +75,32 @@ class key_value_data_set:
         return 1
 
     def __time_to_live(self,ttl,key):
-        pass
+        if(not isinstance(ttl,int)):
+            raise Exception('TTL operand should be of type int')
+        time.sleep(ttl-0.2)
+        self.delete(key)
 
 
-    def create(self, data, ttl = False):
+    def create(self, req_data, ttl = False):
         with self.lock:
             if(self.__checking_file_size(self.file_location)):
-                raise Exception('ERROR : File size is exceeding 1GB')
-            key,value = list(data.items())[0]
+                raise Exception('ERROR : File size is exceeding 1GB') 
+            key,value = list(req_data.items())[0]
             if(ttl):
-                self.__time_to_live(ttl,key)
+                threading.Thread(target=self.__time_to_live, args=(ttl,key)).start() #creating a thread for 
             with open(self.file_location, 'r+') as f:
                 file_data = json.load(f)
                 self.__is_key_value_pair_legitimate(key, value, file_data) 
-                file_data.update(data)
+                file_data.update(req_data)
                 f.seek(0)
-                json.dump(file_data,f)
+                f.write(json.dumps(file_data))
                 return(None)
     
     def read(self, provided_key):
         with open(self.file_location, 'r') as f:
-            file_data = json.load(f)
-            if(provided_key in file_data):
-                return(file_data[provided_key])
+            res_file_data = json.load(f)
+            if(provided_key in res_file_data):
+                return(res_file_data[provided_key])
             else:
                 raise Exception(f"ERROR : provided key {provided_key} isn't in the data-set")
 
