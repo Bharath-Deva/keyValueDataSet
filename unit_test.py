@@ -1,9 +1,14 @@
+'''
+    unit testing for src.py is done here using testfixtures library.
+'''
+
+# ------------------------------------------------------------------------
+
 import unittest
 from testfixtures import tempdir, compare
 from src import KeyValueDataSet
 import os
 import json
-
 
 class TestingKeyValueDataSet(unittest.TestCase):
 
@@ -23,6 +28,9 @@ class TestingKeyValueDataSet(unittest.TestCase):
     
     @tempdir()
     def test_file_creation(self,dir):
+        ''' after creating the instance of KeyValueDataSet checking weather
+        files are created properly irrespective of the user providing the path
+        '''
         print('testing file creation')
         path1 = os.path.join(dir.path,'test.txt')
         obj1 = KeyValueDataSet(path1)
@@ -35,6 +43,9 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_create_fun(self,dir):
+        ''' checking the buisness marks and the creation of json data
+        feeding into the data set file
+        '''
         print('testing create function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
@@ -49,6 +60,9 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_read_fun(self,dir):
+        ''' checking the wheather proper response is obtained from the 
+        read method of src.py
+        '''
         print('testing read function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
@@ -60,6 +74,9 @@ class TestingKeyValueDataSet(unittest.TestCase):
         
     @tempdir()
     def test_delete_fun(self,dir):
+        '''checking wheather delete operation is performed by delete method 
+        with proper key value
+        '''
         print('testing read function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
