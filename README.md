@@ -1,7 +1,7 @@
 ## KeyValueDataStore
 KeyValueDataStore is a Python library which is a file based __*key-value datastore*__ that supports CRD OPERATIONS. This data store is meant to local storage.
 
-###Business Marks
+### Business Marks
 - It can be initialized using an optional file path. If one is not provided, it will reliably create itself in a reasonable location on the laptop.
 
 - A new key-value pair can be added to the data store using the Create operation. The key is always a string - capped at 32chars. The value is always a JSON object - capped at 16KB.
