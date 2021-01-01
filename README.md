@@ -1,8 +1,8 @@
 ## KeyValueDataStore
 KeyValueDataStore is a Python library which is a file based __*key-value datastore*__ that supports CRD OPERATIONS. This data store is meant to local storage.
 
-###Business Marks
-- It can be initialized using an optional file path. If one is not provided, it will reliably create itself in a reasonable location on the laptop.
+### Business Marks
+- It can be initialized using an optional file path. If file path is not provided, it will reliably create itself in a corresponding location on the laptop.
 
 - A new key-value pair can be added to the data store using the Create operation. The key is always a string - capped at 32chars. The value is always a JSON object - capped at 16KB.
 
@@ -20,33 +20,33 @@ KeyValueDataStore is a Python library which is a file based __*key-value datasto
 
 - Thread safety is implemented for the file handling. Thus it supports multi-threading
 
-###About the library
-__Language Used__ : Python 3.9
+### About the library
+__Language Used__ : Python 3.9 and above
 __OS__ : OS independent
 
-####Getting-Started
+#### Getting-Started
 1. Clone the repo
 ```sh
-git clone https://github.com/Bharath-Deva/bharathdeva.git
+https://github.com/Bharath-Deva/key_value_data_set.git
 ```
 
-2. Install the latest version of [Python](https://www.python.org/downloads/) and set environmental path(if required)
-```sh
-pip install
-```
+2. Install the latest version of [Python and PIP](https://www.python.org/downloads/) and set environmental path(if required)
+
 
 3. Install testfixtures package for unit testing
 ```sh
 pip install testfixtures
+python unit_test.py
 ```
 
-4. Import KeyValueDataSet class from [src.py](https://github.com/Bharath-Deva/bharathdeva/blob/master/src.py) and create the instance of the class for using the library.
+
+### Documentation
+
+Import KeyValueDataSet class from [src.py](https://github.com/Bharath-Deva/bharathdeva/blob/master/src.py) and create the instance of the class for using the library.
 ```python
 from src import KeyValueDataSet
 obj = KeyValueDataSet()
 ```
-
-###Documentation
 
 __KeyValueDataSet([file_location])__
     Initiating will create file for data-store.
@@ -57,7 +57,7 @@ __KeyValueDataSet([file_location])__
 __KeyValueDataSet.create(data,[ttl])__
     This will append the user-data to the respected data-set file.
     *data* Data should always be of type dictionary.
-    *[ttl]* It is the time-to-live property provided only in seconds.
+    *[ttl]* It is the time-to-live property provided only in seconds and of type __int__.
     returns None.
 
 __KeyValueDataSet.read(key)__
@@ -70,6 +70,5 @@ __KeyValueDataSet.delete(key)__
     *key* key of the value which they want to delete.
     return None.
 
-###Acknowledgement
+### Acknowledgement
 1. [Python Documentaion](https://docs.python.org/3/)
-

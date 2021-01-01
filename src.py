@@ -39,20 +39,16 @@ class KeyValueDataSet:
         try:
             if(file_path == 'data.json'): 
                 self.file_location = file_path 
-                self.__open_file()
+                self.__handling_file_data('w',{})
             else:
                 self.file_location = file_path
                 file_path = os.path.dirname(file_path)
                 if not os.path.exists(file_path):
                     os.makedirs(file_path)
                 if not os.path.isfile(self.file_location):
-                    self.__open_file()
+                    self.__handling_file_data('w',{})
         except OSError:
             raise OSError('ERROR : Path is not valid')
-
-    def __open_file(self):
-        with open(self.file_location, 'w') as f:
-            json.dump({},f)
 
     def __is_key_value_pair_legitimate(self, key, value, file_data):
         ''' checking weather the key and value satisfy the business marks.
