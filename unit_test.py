@@ -30,7 +30,7 @@ class TestingKeyValueDataSet(unittest.TestCase):
     @tempdir()
     def test_user_defined_file_creation(self,dir):
         ''' after creating the instance of KeyValueDataSet checking weather
-        files are created properly irrespective of path provided by the user.
+        files are created properly if user provides the path
         '''
         print('testing file creation')
         user_defined_path = os.path.join(dir.path,'test.txt')
@@ -40,6 +40,9 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_default_file_creation(self,dir):
+        ''' after creating the instance of KeyValueDataSet checking weather
+        files are created properly if user didn't provides the path
+        '''
         default_path = os.path.join(os.getcwd(),'data.json')
         default_obj = KeyValueDataSet()
         if not (os.path.exists(default_path)):
@@ -47,9 +50,7 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_single_input_create_fun(self,dir):
-        ''' checking the buisness marks and the creation of json data
-        feeding into the data set file
-        '''
+        ''' testing create func with single input '''
         print('testing create function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
@@ -64,6 +65,7 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_buisness_marks(self,dir):
+        ''' testing buisness marks '''
         print('testing create function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
@@ -77,6 +79,7 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_multiple_input_create_fun(self,dir):
+        ''' testing create func with multiple inputs '''
         print('testing multiple input for create function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
@@ -90,6 +93,7 @@ class TestingKeyValueDataSet(unittest.TestCase):
 
     @tempdir()
     def test_time_to_live_property(self,dir):
+        ''' testing the time to live property for the input data '''
         print('testing time to live function')
         path = os.path.join(dir.path,'test.txt')
         obj = KeyValueDataSet(path)
