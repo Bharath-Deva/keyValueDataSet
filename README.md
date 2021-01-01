@@ -20,11 +20,11 @@ KeyValueDataStore is a Python library which is a file based __*key-value datasto
 
 - Thread safety is implemented for the file handling. Thus it supports multi-threading
 
-###About the library
+### About the library
 __Language Used__ : Python 3.9
 __OS__ : OS independent
 
-####Getting-Started
+#### Getting-Started
 1. Clone the repo
 ```sh
 git clone https://github.com/Bharath-Deva/bharathdeva.git
@@ -46,7 +46,7 @@ from src import KeyValueDataSet
 obj = KeyValueDataSet()
 ```
 
-###Documentation
+### Documentation
 
 __KeyValueDataSet([file_location])__
     Initiating will create file for data-store.
@@ -70,6 +70,6 @@ __KeyValueDataSet.delete(key)__
     *key* key of the value which they want to delete.
     return None.
 
-###Acknowledgement
+### Acknowledgement
 1. [Python Documentaion](https://docs.python.org/3/)
 
