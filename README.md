@@ -1,9 +1,9 @@
 ## KeyValueDataStore
 KeyValueDataStore is a Python library which is a file based __*key-value datastore*__ that supports CRD OPERATIONS. This data store is meant to local storage.
 
-[src.py](https://github.com/Bharath-Deva/bharathdeva/blob/master/src.py) souurce file for the library
+[src.py](https://github.com/Bharath-Deva/bharathdeva/blob/master/src.py) source file for the library.
 
-[unit_test.py](https://github.com/Bharath-Deva/bharathdeva/blob/master/unit_test.py) unit testing file for the library
+[unit_test.py](https://github.com/Bharath-Deva/bharathdeva/blob/master/unit_test.py) unit testing file for the library.
 
 ### Business Marks
 - It can be initialized using an optional file path. If file path is not provided, it will reliably create itself in a corresponding location on the laptop.
@@ -22,7 +22,7 @@ KeyValueDataStore is a Python library which is a file based __*key-value datasto
 
 - The file size never exceeds 1GB.
 
-- Thread safety is implemented for the file handling. Thus it supports multi-threading
+- Thread safety is implemented for the file handling. Thus it supports multi-threading.
 
 ### About the library
 __Language Used__ : Python 3.9 and above
